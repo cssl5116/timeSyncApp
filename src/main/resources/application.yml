@@ -1,0 +1,56 @@
+server:
+  tomcat:
+    threads:
+      min-spare: 30
+    connection-timeout: 5000ms
+  port: 8080
+  servlet:
+    context-path: /time
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/timeSync?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: admin
+      initial-size: 2
+      max-active: 4
+      min-idle: 2
+      max-wait: 60000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: admin
+    jedis:
+      pool:
+        max-active: 1000
+        max-wait: -1ms
+        max-idle: 16
+        min-idle: 8
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: timeSync
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.timeSync.www.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    root: info
+    com.timeSync.www.mapper: warn
+  pattern:
+    console: "%d{HH:mm:ss} %-5level %msg%n"
+time-sync:
+  jwt:
+    secret: timeSyncApp_fishx_123456
+    expire: 5
+    cache-expire: 10
