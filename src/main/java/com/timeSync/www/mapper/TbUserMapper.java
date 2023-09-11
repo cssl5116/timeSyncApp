@@ -1,6 +1,10 @@
 package com.timeSync.www.mapper;
 
+import com.timeSync.www.entity.TbUser;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.HashMap;
+import java.util.Set;
 
 /**
 * @author fishx
@@ -10,7 +14,12 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface TbUserMapper {
-
+  public boolean havaRootUser();
+  public int insert(HashMap hashMap);
+  public Integer searchIdByOpenId(String openId);
+  public Set<String> searchUserPermissions(int userId);
+  TbUser searchById(int userId);
+  int updateImg(int userId,String url);
 }
 
 

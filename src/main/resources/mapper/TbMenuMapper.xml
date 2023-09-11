@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.timeSync.www.mapper.TbMenuMapper">
+
+  <select id="findMenuByTypeId" resultType="com.timeSync.www.entity.TbMenu">
+    select * from tb_menu
+    where type=#{id}
+    <if test="pid!=null and pid!=''">
+      and parent=#{pid}
+    </if>
+  </select>
+  <select id="findMenu" resultType="com.timeSync.www.entity.TbMenu">
+    select * from tb_menu m join tb_permission p
+    on m.permissionId=p.id
+    where type=3
+    <if test="pid!=null and pid!=''">
+      and parent=#{pid}
+    </if>
+  </select>
+</mapper>
