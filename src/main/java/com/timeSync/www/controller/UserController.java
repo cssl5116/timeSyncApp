@@ -3,6 +3,8 @@ package com.timeSync.www.controller;
 import com.timeSync.www.config.shiro.JwtUtils;
 import com.timeSync.www.dto.LoginForm;
 import com.timeSync.www.dto.RegisterForm;
+import com.timeSync.www.entity.TbUser;
+import com.timeSync.www.exception.ConditionException;
 import com.timeSync.www.service.UserService;
 import com.timeSync.www.utils.R;
 import io.swagger.annotations.Api;
@@ -46,13 +48,14 @@ public class UserController {
 
   @PostMapping("/login")
   @ApiOperation("登录系统")
-  public  R login(@Valid @RequestBody LoginForm form){
+  public R login(@Valid @RequestBody LoginForm form) {
     int id = userService.login(form.getCode());
-    String token=jwtUtils.createToken(id);
-    saveCacheToken(token,id);
+    String token = jwtUtils.createToken(id);
+    saveCacheToken(token, id);
     Set<String> permsSet = userService.searchUserPermissions(id);
-    return R.ok("登录成功").put("token",token).put("permission",permsSet);
+    return R.ok("登录成功").put("token", token).put("permission", permsSet);
   }
+
   @RequestMapping("/upload/img")
   public R upload(MultipartFile file, HttpServletRequest request) {
     return userService.upload(file, request);
@@ -62,5 +65,14 @@ public class UserController {
     stringRedisTemplate.opsForValue().set(token, String.valueOf(userId), cacheExpire, TimeUnit.DAYS);
   }
 
-
+  @PostMapping("/loginH")
+  public R loginH(String phone, String code) {
+    TbUser tbUser = userService.loginH(phone, code);
+    if (tbUser == null) throw new ConditionException("登录失败");
+    Integer id = tbUser.getId();
+    String token = jwtUtils.createToken(id);
+    saveCacheToken(token, id);
+    Set<String> permsSet = userService.searchUserPermissions(id);
+    return R.ok("登录成功").put("token", token).put("permission", permsSet);
+  }
 }

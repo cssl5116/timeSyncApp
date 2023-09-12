@@ -20,6 +20,8 @@ public interface TbUserMapper {
   public Set<String> searchUserPermissions(int userId);
   TbUser searchById(int userId);
   int updateImg(int userId,String url);
+  TbUser loginH(String phone);
+  boolean check(String phone);
 }
 
 

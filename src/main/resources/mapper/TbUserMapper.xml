@@ -29,6 +29,14 @@
     WHERE id = #{userId}
       AND status = 1
   </select>
+  <select id="loginH" resultType="com.timeSync.www.entity.TbUser">
+    select * from tb_user where tel=#{phone} AND status = 1
+  </select>
+  <select id="check" resultType="java.lang.Boolean">
+    select if(count(*), true, false)
+    from tb_user
+    where tel=#{phone}
+  </select>
 
   <insert id="insert" parameterType="hashmap">
     insert into tb_user

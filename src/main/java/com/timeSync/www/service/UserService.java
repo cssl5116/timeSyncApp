@@ -15,4 +15,6 @@ public interface UserService {
   Integer login(String code);
 
   R upload(MultipartFile file, HttpServletRequest request);
+  TbUser loginH(String phone,String code);
+  R check(String phone);
 }

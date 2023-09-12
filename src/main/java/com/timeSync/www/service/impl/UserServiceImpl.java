@@ -19,6 +19,7 @@ import com.timeSync.www.utils.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -45,10 +47,12 @@ public class UserServiceImpl implements UserService {
   private JwtUtils jwtUtils;
   @Resource
   private MessageTask messageTask;
+  @Resource
+  private StringRedisTemplate stringRedisTemplate;
 
   private String getOpenId(String code) {
     String url = "https://api.weixin.qq.com/sns/jscode2session";
-    HashMap<String,Object> map = new HashMap<>();
+    HashMap<String, Object> map = new HashMap<>();
     map.put("appid", appId);
     map.put("secret", appSecret);
     map.put("js_code", code);
@@ -68,12 +72,12 @@ public class UserServiceImpl implements UserService {
       boolean bool = tbUserMapper.havaRootUser();
       if (!bool) {
         String openId = getOpenId(code);
-        HashMap<String,Object> param = new HashMap<>();
+        HashMap<String, Object> param = new HashMap<>();
         param.put("openId", openId);
         param.put("nickname", nickname);
         param.put("photo", photo);
         param.put("role", "[0]");
-        param.put("tel","18569521613");
+        param.put("tel", "18569521613");
         param.put("status", 1);
         param.put("createTime", new Date());
         param.put("root", true);
@@ -109,9 +113,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Integer login(String code) {
-    String openId=getOpenId(code);
+    String openId = getOpenId(code);
     Integer id = tbUserMapper.searchIdByOpenId(openId);
-    if (id==null){
+    if (id == null) {
       throw new ConditionException("用户不存在");
     }
     // 从消息队列中接受信息,转移到消息表
@@ -131,7 +135,7 @@ public class UserServiceImpl implements UserService {
       }
       // oos上传
       String absPath = realPath + fileName;
-      fileName="user/"+fileName;
+      fileName = "user/" + fileName;
       OosUtils.upload(absPath, fileName);
       // 删除临时文件
       File tempfile = new File(absPath);
@@ -142,12 +146,37 @@ public class UserServiceImpl implements UserService {
       }
       // 更新数据库
       int userId = jwtUtils.getUserId(request.getHeader("token"));
-      if (tbUserMapper.updateImg(userId,fileName)<0) {
+      if (tbUserMapper.updateImg(userId, fileName) < 0) {
         throw new ConditionException("图片上传失败");
       }
       return R.ok();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public TbUser loginH(String phone, String code) {
+    String cacheCode = stringRedisTemplate.opsForValue().get("user:phone:" + phone);
+    TbUser tbUser = tbUserMapper.loginH(phone);
+    if (code.equals(cacheCode)) {
+      return tbUser;
+    }
+    return null;
+  }
+
+  @Override
+  public R check(String phone) {
+    if (tbUserMapper.check(phone)) {
+      try {
+        String sms = WebUtils.sms(phone);
+        stringRedisTemplate.opsForValue()
+            .set("user:phone:" + phone, sms, 5, TimeUnit.MINUTES);
+        return R.ok("发送成功");
+      } catch (Exception e) {
+        return R.error("验证码发送失败");
+      }
+    }
+    return R.error("用户不存在");
   }
 }

@@ -1,6 +1,8 @@
 package com.timeSync.www;
 
+import cn.hutool.core.util.RandomUtil;
 import com.timeSync.www.service.MenuService;
+import com.timeSync.www.utils.WebUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,6 +19,10 @@ public class AppTest {
 
   @Test
   public void test2(){
-
+    try {
+      System.out.println(WebUtils.sms("18569521613"));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
