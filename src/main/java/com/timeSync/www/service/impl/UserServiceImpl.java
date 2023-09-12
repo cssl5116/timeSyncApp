@@ -1,14 +1,18 @@
 package com.timeSync.www.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.timeSync.www.config.shiro.JwtUtils;
+import com.timeSync.www.entity.MessageEntity;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.exception.ConditionException;
 import com.timeSync.www.mapper.TbUserMapper;
 import com.timeSync.www.service.UserService;
+import com.timeSync.www.task.MessageTask;
 import com.timeSync.www.utils.OosUtils;
 import com.timeSync.www.utils.R;
 import com.timeSync.www.utils.WebUtils;
@@ -39,6 +43,8 @@ public class UserServiceImpl implements UserService {
   private TbUserMapper tbUserMapper;
   @Resource
   private JwtUtils jwtUtils;
+  @Resource
+  private MessageTask messageTask;
 
   private String getOpenId(String code) {
     String url = "https://api.weixin.qq.com/sns/jscode2session";
@@ -62,7 +68,7 @@ public class UserServiceImpl implements UserService {
       boolean bool = tbUserMapper.havaRootUser();
       if (!bool) {
         String openId = getOpenId(code);
-        HashMap param = new HashMap();
+        HashMap<String,Object> param = new HashMap<>();
         param.put("openId", openId);
         param.put("nickname", nickname);
         param.put("photo", photo);
@@ -71,14 +77,21 @@ public class UserServiceImpl implements UserService {
         param.put("status", 1);
         param.put("createTime", new Date());
         param.put("root", true);
-        tbUserMapper.insert(param);
-        int id = tbUserMapper.searchIdByOpenId(openId);
+        if (tbUserMapper.insert(param) < 0) throw new ConditionException("注册失败");
+        MessageEntity entity = new MessageEntity();
+        entity.setSenderId(0);
+        entity.setSenderName("系统消息");
+        entity.setUuid(IdUtil.simpleUUID());
+        entity.setMsg("欢迎您注册成为超级管理员,请及时更新你的员工个人信息.");
+        entity.setSendTime(DateUtil.date());
+        Integer id = tbUserMapper.searchIdByOpenId(openId);
+        messageTask.sendAsync(String.valueOf(id), entity);
         return id;
       } else {
         throw new ConditionException("无法绑定超级管理员账号");
       }
     } else {
-
+      // 其他判断
     }
     return 0;
   }
@@ -101,7 +114,8 @@ public class UserServiceImpl implements UserService {
     if (id==null){
       throw new ConditionException("用户不存在");
     }
-    //TODO 从消息队列中接收数据，转移到消息表
+    // 从消息队列中接受信息,转移到消息表
+    messageTask.receiveAysnc(String.valueOf(userId));
     return id;
   }
 
