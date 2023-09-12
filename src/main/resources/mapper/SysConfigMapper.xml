@@ -3,4 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.timeSync.www.mapper.SysConfigMapper">
+  <select id="selectAllParam" resultType="com.timeSync.www.entity.SysConfig">
+    SELECT param_key, param_value FROM sys_config WHERE status = 1;
+  </select>
 </mapper>

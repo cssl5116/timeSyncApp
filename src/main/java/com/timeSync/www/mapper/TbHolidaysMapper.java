@@ -1,7 +1,8 @@
 package com.timeSync.www.mapper;
 
-import com.timeSync.www.entity.TbHolidays;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Set;
 
 /**
 * @author fishx
@@ -11,7 +12,8 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface TbHolidaysMapper {
-
+  boolean saveBatchHoliday(Set<String> holidaysList);
+  Integer searchTodayIsHolidays();
 }
 
 

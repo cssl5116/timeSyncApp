@@ -1,7 +1,8 @@
 package com.timeSync.www.mapper;
 
-import com.timeSync.www.entity.TbWorkday;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.Set;
 
 /**
 * @author fishx
@@ -11,7 +12,9 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface TbWorkdayMapper {
+  boolean saveBatchWorkday(Set<String> workdayList);
 
+  Integer searchTodayWorkday();
 }
 
 

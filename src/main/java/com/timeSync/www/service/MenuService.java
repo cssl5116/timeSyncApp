@@ -4,6 +4,6 @@ import com.timeSync.www.entity.TbMenu;
 
 import java.util.List;
 
-public interface TbMenuService {
+public interface MenuService {
   List<TbMenu> findMenuByTypeId();
 }

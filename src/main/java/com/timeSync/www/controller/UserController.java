@@ -1,8 +1,8 @@
 package com.timeSync.www.controller;
 
 import com.timeSync.www.config.shiro.JwtUtils;
-import com.timeSync.www.controller.form.LoginForm;
-import com.timeSync.www.controller.form.RegisterForm;
+import com.timeSync.www.dto.LoginForm;
+import com.timeSync.www.dto.RegisterForm;
 import com.timeSync.www.service.UserService;
 import com.timeSync.www.utils.R;
 import io.swagger.annotations.Api;
