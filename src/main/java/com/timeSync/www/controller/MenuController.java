@@ -1,6 +1,6 @@
 package com.timeSync.www.controller;
 
-import com.timeSync.www.service.TbMenuService;
+import com.timeSync.www.service.MenuService;
 import com.timeSync.www.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 @RequestMapping("/menu")
 public class MenuController {
   @Resource
-  private TbMenuService tbMenuService;
+  private MenuService tbMenuService;
   @PostMapping("/list")
   @ApiOperation("查询菜单列表")
   public R selectMenu() {
