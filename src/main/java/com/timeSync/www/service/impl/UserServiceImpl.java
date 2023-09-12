@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
       throw new ConditionException("用户不存在");
     }
     // 从消息队列中接受信息,转移到消息表
-    messageTask.receiveAysnc(String.valueOf(userId));
+    messageTask.receiveAysnc(String.valueOf(id));
     return id;
   }
 
