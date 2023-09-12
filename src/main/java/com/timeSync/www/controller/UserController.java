@@ -56,6 +56,12 @@ public class UserController {
     return R.ok("登录成功").put("token", token).put("permission", permsSet);
   }
 
+  @PostMapping("/check")
+  @ApiOperation("获取验证码")
+  public R check(String phone){
+   return userService.check(phone);
+  }
+
   @RequestMapping("/upload/img")
   public R upload(MultipartFile file, HttpServletRequest request) {
     return userService.upload(file, request);
@@ -66,6 +72,7 @@ public class UserController {
   }
 
   @PostMapping("/loginH")
+  @ApiOperation("手机号登录")
   public R loginH(String phone, String code) {
     TbUser tbUser = userService.loginH(phone, code);
     if (tbUser == null) throw new ConditionException("登录失败");
