@@ -83,4 +83,15 @@ public class WebUtils {
     hashMap.put("special_workday_list", special_workday_list);
     return hashMap;
   }
+
+  public static com.aliyun.dysmsapi20170525.Client createClient(String accessKeyId, String accessKeySecret) throws Exception {
+    com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config()
+        // 必填，您的 AccessKey ID
+        .setAccessKeyId(accessKeyId)
+        // 必填，您的 AccessKey Secret
+        .setAccessKeySecret(accessKeySecret);
+    // Endpoint 请参考 https://api.aliyun.com/product/Dysmsapi
+    config.endpoint = "dysmsapi.aliyuncs.com";
+    return new com.aliyun.dysmsapi20170525.Client(config);
+  }
 }
