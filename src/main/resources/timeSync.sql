@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 12/09/2023 11:48:23
+ Date: 13/09/2023 09:48:48
 */
 
 SET NAMES utf8mb4;
@@ -850,12 +850,12 @@ INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `par
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (6, NULL, '用户删除', NULL, 2, 3, 4, '2023-09-11 15:32:22', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (7, NULL, '用户修改', NULL, 3, 3, 4, '2023-09-11 15:34:09', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (8, NULL, '用户查询', NULL, 4, 3, 4, '2023-09-11 15:34:26', NULL);
-INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (9, 'Role', '角色管理', '/main/system/role', NULL, 2, 3, '2023-09-11 15:37:55', NULL);
+INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (9, 'Aim', '角色管理', '/main/system/role', NULL, 2, 3, '2023-09-11 15:37:55', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (10, NULL, '角色增加', NULL, 5, 3, 9, '2023-09-11 15:38:32', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (11, NULL, '角色删除', NULL, 6, 3, 9, '2023-09-11 15:38:55', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (12, NULL, '角色修改', NULL, 7, 3, 9, '2023-09-11 15:39:10', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (13, NULL, '角色查询', NULL, 8, 3, 9, '2023-09-11 15:39:25', NULL);
-INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (14, 'CHECK', '考勤管理', '/main/system/check', NULL, 2, 3, '2023-09-11 15:40:39', NULL);
+INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (14, 'EditPen', '考勤管理', '/main/system/check', NULL, 2, 3, '2023-09-11 15:40:39', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (15, NULL, '考勤增加', NULL, 9, 3, 14, '2023-09-11 15:41:02', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (16, NULL, '考勤删除', NULL, 10, 3, 14, '2023-09-11 15:41:22', NULL);
 INSERT INTO `tb_menu` (`id`, `icon`, `name`, `url`, `permissionId`, `type`, `parent`, `createAt`, `updateAt`) VALUES (17, NULL, '考勤修改', NULL, 11, 3, 14, '2023-09-11 15:41:39', NULL);
@@ -980,7 +980,7 @@ CREATE TABLE `tb_user` (
 -- Records of tb_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_user` (`id`, `open_id`, `nickname`, `photo`, `name`, `sex`, `tel`, `email`, `hiredate`, `role`, `root`, `dept_id`, `status`, `create_time`) VALUES (18, 'oy7Ez5A7ePX1iG2MgGK1WOgz4X0k', 'fishx', 'user/1bbchznd.jpeg', NULL, NULL, NULL, NULL, NULL, '[0]', 1, NULL, 1, '2023-09-05 03:17:42');
+INSERT INTO `tb_user` (`id`, `open_id`, `nickname`, `photo`, `name`, `sex`, `tel`, `email`, `hiredate`, `role`, `root`, `dept_id`, `status`, `create_time`) VALUES (18, 'oy7Ez5A7ePX1iG2MgGK1WOgz4X0k', 'fishx', 'user/1bbchznd.jpeg', NULL, NULL, '15073058367', NULL, NULL, '[0]', 1, NULL, 1, '2023-09-12 19:10:11');
 COMMIT;
 
 -- ----------------------------

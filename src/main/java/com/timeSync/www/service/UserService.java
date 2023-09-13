@@ -11,14 +11,18 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserService {
-   int registerUser(String registerCode,String code,String nickname,String photo);
-   Set<String> searchUserPermissions(int userId);
+  int registerUser(String registerCode, String code, String nickname, String photo);
+
+  Set<String> searchUserPermissions(int userId);
 
   TbUser searchById(int userId);
+
   Integer login(String code);
 
   R upload(MultipartFile file, HttpServletRequest request);
-  TbUser loginH(String phone,String code);
+
+  TbUser loginH(String phone, String code);
+
   R check(String phone);
 
   ArrayList<HashMap> searchUserGroupByDept(String keyword);
