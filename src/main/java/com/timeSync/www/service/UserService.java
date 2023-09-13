@@ -5,6 +5,9 @@ import com.timeSync.www.utils.R;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public interface UserService {
@@ -17,4 +20,8 @@ public interface UserService {
   R upload(MultipartFile file, HttpServletRequest request);
   TbUser loginH(String phone,String code);
   R check(String phone);
+
+  ArrayList<HashMap> searchUserGroupByDept(String keyword);
+
+  ArrayList<HashMap> searchMembers(List param);
 }
