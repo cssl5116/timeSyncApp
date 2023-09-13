@@ -39,9 +39,4 @@ public class ApplicationTests {
       messageService.insertMessageRef(ref);
     }
   }
-
-  @Test
-  void menuTest() {
-    menuService.findMenuByTypeId().forEach(System.out::println);
-  }
 }

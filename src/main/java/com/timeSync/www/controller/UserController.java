@@ -58,8 +58,8 @@ public class UserController {
 
   @PostMapping("/check")
   @ApiOperation("获取验证码")
-  public R check(String phone){
-   return userService.check(phone);
+  public R check(String phone) {
+    return userService.check(phone);
   }
 
   @RequestMapping("/upload/img")
@@ -80,6 +80,6 @@ public class UserController {
     String token = jwtUtils.createToken(id);
     saveCacheToken(token, id);
     Set<String> permsSet = userService.searchUserPermissions(id);
-    return R.ok("登录成功").put("token", token).put("permission", permsSet);
+    return R.ok("登录成功").put("user", tbUser).put("token", token).put("permission", permsSet);
   }
 }

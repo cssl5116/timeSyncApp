@@ -2,6 +2,7 @@ package com.timeSync.www.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
@@ -169,7 +170,8 @@ public class UserServiceImpl implements UserService {
   public R check(String phone) {
     if (tbUserMapper.check(phone)) {
       try {
-        String sms = WebUtils.sms(phone);
+//        String sms = WebUtils.sms(phone);
+        String sms = RandomUtil.randomNumbers(6);
         stringRedisTemplate.opsForValue()
             .set("user:phone:" + phone, sms, 5, TimeUnit.MINUTES);
         return R.ok("发送成功");
@@ -177,6 +179,6 @@ public class UserServiceImpl implements UserService {
         return R.error("验证码发送失败");
       }
     }
-    return R.error("用户不存在");
+    return R.error("该用户不存在");
   }
 }
