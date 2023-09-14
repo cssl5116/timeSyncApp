@@ -3,6 +3,9 @@ package com.timeSync.www.mapper;
 import com.timeSync.www.entity.TbDept;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
 * @author fishx
 * @description 针对表【tb_dept】的数据库操作Mapper
@@ -11,7 +14,8 @@ import org.apache.ibatis.annotations.Mapper;
 */
 @Mapper
 public interface TbDeptMapper {
-
+    //查询部门成员
+    public ArrayList<HashMap> searchDeptMembers(String keyword);
 }
 
 
