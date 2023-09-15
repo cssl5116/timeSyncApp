@@ -9,6 +9,7 @@ import com.timeSync.www.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -26,5 +27,10 @@ public class RoleServiceImpl implements RoleService {
   public PageInfo<TbRole> roleList(RoleSearchForm form) {
     PageHelper.startPage(form.getOffset(), form.getSize());
     return new PageInfo<>(roleMapper.roleList(form));
+  }
+
+  @Override
+  public List<TbRole> selectRole() {
+    return roleMapper.selectRole();
   }
 }

@@ -6,6 +6,15 @@
   <update id="updateImg">
     update tb_user set photo=#{url} where id=#{userId}
   </update>
+  <update id="updateQ">
+    update tb_user set open_id=#{openId} ,nickname=#{nickname},photo=#{photo}
+    where code=#{code}
+  </update>
+  <select id="havaCode" resultType="tbUser">
+    select *
+    from tb_user
+    where code=#{code}
+  </select>
   <select id="havaRootUser" resultType="boolean">
     select if(count(*), true, false)
     from tb_user
@@ -150,5 +159,43 @@
     </if>
     status=#{status},
     create_time=#{createTime}
+  </insert>
+  <insert id="insertUser" parameterType="tbUser">
+    insert into tb_user
+    set
+    <if test="openId!=null">
+      open_id=#{openId},
+    </if>
+    <if test="nickname!=null">
+      nickname=#{nickname},
+    </if>
+    <if test="photo!=null">
+      photo=#{photo},
+    </if>
+    <if test="name!=null">
+      name=#{name},
+    </if>
+    <if test="sex!=null">
+      sex=#{sex},
+    </if>
+    <if test="tel!=null">
+      tel=#{tel},
+    </if>
+    <if test="email!=null">
+      email=#{email},
+    </if>
+    <if test="hiredate!=null">
+      hiredate=#{hiredate},
+    </if>
+    <if test="role!=null">
+      role=#{role},
+    </if>
+    root=0,
+    <if test="deptId!=null">
+      dept_id=#{deptId},
+    </if>
+    status=#{status},
+    create_time=#{createTime},
+    code=#{code}
   </insert>
 </mapper>

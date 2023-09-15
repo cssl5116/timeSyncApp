@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -18,8 +19,7 @@ public class TbUser implements Serializable {
   /**
    * 主键
    */
-  @NotNull(message = "[主键]不能为空")
-  @ApiModelProperty("主键")
+
   private Integer id;
   /**
    * 长期授权字符串
@@ -45,7 +45,7 @@ public class TbUser implements Serializable {
    * 性别
    */
   @ApiModelProperty("性别")
-  private Object sex;
+  private String sex;
   /**
    * 手机号码
    */
@@ -64,13 +64,11 @@ public class TbUser implements Serializable {
   /**
    * 角色
    */
-  @NotNull(message = "[角色]不能为空")
   @ApiModelProperty("角色")
   private Object role;
   /**
    * 是否是超级管理员
    */
-  @NotNull(message = "[是否是超级管理员]不能为空")
   @ApiModelProperty("是否是超级管理员")
   private Integer root;
   /**
@@ -81,13 +79,12 @@ public class TbUser implements Serializable {
   /**
    * 状态
    */
-  @NotNull(message = "[状态]不能为空")
   @ApiModelProperty("状态")
   private Integer status;
   /**
    * 创建时间
    */
-  @NotNull(message = "[创建时间]不能为空")
   @ApiModelProperty("创建时间")
   private Date createTime;
+  private String code;
 }

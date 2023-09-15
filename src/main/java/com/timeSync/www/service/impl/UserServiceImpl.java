@@ -17,6 +17,7 @@ import com.timeSync.www.exception.ConditionException;
 import com.timeSync.www.mapper.TbDeptMapper;
 import com.timeSync.www.mapper.TbUserMapper;
 import com.timeSync.www.service.UserService;
+import com.timeSync.www.task.EmailTask;
 import com.timeSync.www.task.MessageTask;
 import com.timeSync.www.utils.OosUtils;
 import com.timeSync.www.utils.R;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +56,8 @@ public class UserServiceImpl implements UserService {
   private StringRedisTemplate stringRedisTemplate;
   @Resource
   private TbDeptMapper deptDao;
+  @Resource
+  private EmailTask emailTask;
 
   private String getOpenId(String code) {
     String url = "https://api.weixin.qq.com/sns/jscode2session";
@@ -100,7 +104,20 @@ public class UserServiceImpl implements UserService {
         throw new ConditionException("无法绑定超级管理员账号");
       }
     } else {
-      // 其他判断
+      TbUser tbUser = tbUserMapper.havaCode(registerCode);
+      if (tbUser!=null) {
+        String openId = getOpenId(code);
+        if (tbUserMapper.updateQ(openId, nickname, photo, registerCode) < 0) throw new ConditionException("注册失败");
+        MessageEntity entity = new MessageEntity();
+        entity.setSenderId(0);
+        entity.setSenderName("系统消息");
+        entity.setUuid(IdUtil.simpleUUID());
+        entity.setMsg("欢迎您加入,请及时更新你的员工个人信息.");
+        entity.setSendTime(DateUtil.date());
+        Integer id = tbUserMapper.searchIdByOpenId(openId);
+        messageTask.sendAsync(String.valueOf(id), entity);
+        return id;
+      }
     }
     return 0;
   }
@@ -215,7 +232,24 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public PageInfo<TbUser> userList(UserSeacherForm form) {
-    PageHelper.startPage(form.getOffset(),form.getSize());
+    PageHelper.startPage(form.getOffset(), form.getSize());
     return new PageInfo<>(tbUserMapper.selectUser(form));
   }
+
+  @Override
+  public boolean insertUser(TbUser user) {
+    user.setCode(RandomUtil.randomNumbers(6));
+    user.setCreateTime(new Date());
+    boolean b = tbUserMapper.insertUser(user) > 0;
+    if (b) {
+      try {
+        emailTask.sendAsync(user.getEmail(), user.getCode());
+      } catch (MessagingException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return b;
+  }
+
+
 }

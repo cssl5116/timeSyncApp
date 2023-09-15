@@ -12,4 +12,10 @@
       </if>
     </where>
   </select>
+  <select id="selectRole" resultType="com.timeSync.www.entity.TbRole">
+    select * from tb_role
+  </select>
+  <select id="findByName" resultType="java.lang.Integer">
+    select id from tb_role where role_name=#{name}
+  </select>
 </mapper>

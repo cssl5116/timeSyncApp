@@ -19,9 +19,10 @@ import java.util.Set;
 @Mapper
 public interface TbUserMapper {
   public boolean havaRootUser();
+  public TbUser havaCode(String code);
 
   public int insert(HashMap hashMap);
-
+  public int updateQ(String openId,String nickname,String photo,String code);
   public Integer searchIdByOpenId(String openId);
 
   public Set<String> searchUserPermissions(int userId);
@@ -50,6 +51,11 @@ public interface TbUserMapper {
   public int searchGmId();
 
   List<TbUser> selectUser(@Param("form") UserSeacherForm form);
+
+  int insertUser(TbUser user);
+
+
+
 }
 
 

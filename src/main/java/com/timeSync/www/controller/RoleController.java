@@ -29,4 +29,10 @@ public class RoleController {
   public R selectList(@Valid RoleSearchForm form) {
     return R.ok().put("data", roleService.roleList(form));
   }
+
+  @GetMapping("/roleList")
+  @ApiOperation("查询角色")
+  public R selectRole() {
+    return R.ok().put("list", roleService.selectRole());
+  }
 }

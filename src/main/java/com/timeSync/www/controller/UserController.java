@@ -1,10 +1,12 @@
 package com.timeSync.www.controller;
 
 import cn.hutool.json.JSONUtil;
+import com.alibaba.druid.support.json.JSONUtils;
 import com.timeSync.www.config.shiro.JwtUtils;
 import com.timeSync.www.dto.*;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.exception.ConditionException;
+import com.timeSync.www.mapper.TbRoleMapper;
 import com.timeSync.www.service.UserService;
 import com.timeSync.www.utils.R;
 import io.swagger.annotations.Api;
@@ -38,15 +40,39 @@ public class UserController {
   @Value("${time-sync.jwt.cache-expire}")
   private int cacheExpire;
 
+  @Resource
+  private TbRoleMapper roleMapper;
+
   @PostMapping("/register")
   @ApiOperation("注册用户")
   public R register(@Valid @RequestBody RegisterForm form) {
     int id = userService.registerUser(form.getRegisterCode(), form.getCode(), form.getNickName(), form.getPhoto());
+    if (id==0){
+      return R.error("注册码无效");
+    }
     String token = jwtUtils.createToken(id);
     Set<String> permsSet = userService.searchUserPermissions(id);
     saveCacheToken(token, id);
     return R.ok("用户注册成功").put("token", token).put("permission", permsSet);
   }
+
+  @PostMapping("/save")
+  @ApiOperation("创建用户")
+  public R register(@RequestBody TbUser user) {
+    ArrayList<Object> role = (ArrayList<Object>) user.getRole();
+    ArrayList<Integer> ids = new ArrayList<>();
+    for (Object o : role) {
+      int id = roleMapper.findByName(o.toString());
+      ids.add(id);
+    }
+    user.setRole(JSONUtils.toJSONString(ids));
+
+    if (userService.insertUser(user)) {
+      return R.ok("新增成功");
+    }
+    return R.error("新增失败");
+  }
+
 
   @PostMapping("/login")
   @ApiOperation("登录系统")
