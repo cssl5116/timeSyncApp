@@ -1,9 +1,12 @@
 package com.timeSync.www.mapper;
 
+import com.timeSync.www.dto.UserSeacherForm;
 import com.timeSync.www.entity.TbUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,13 +25,15 @@ public interface TbUserMapper {
 
   public Set<String> searchUserPermissions(int userId);
 
-  TbUser searchById(int userId);
+  TbUser searchById(int uxserId);
 
   int updateImg(int userId, String url);
 
   TbUser loginH(String phone);
 
   boolean check(String phone);
+
+  List<TbUser> selectUser(@Param("form") UserSeacherForm form);
 }
 
 

@@ -7,7 +7,10 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.timeSync.www.config.shiro.JwtUtils;
+import com.timeSync.www.dto.UserSeacherForm;
 import com.timeSync.www.entity.MessageEntity;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.exception.ConditionException;
@@ -180,5 +183,11 @@ public class UserServiceImpl implements UserService {
       }
     }
     return R.error("该用户不存在");
+  }
+
+  @Override
+  public PageInfo<TbUser> userList(UserSeacherForm form) {
+    PageHelper.startPage(form.getOffset(),form.getSize());
+    return new PageInfo<>(tbUserMapper.selectUser(form));
   }
 }

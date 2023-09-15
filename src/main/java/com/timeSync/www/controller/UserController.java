@@ -1,8 +1,10 @@
 package com.timeSync.www.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.timeSync.www.config.shiro.JwtUtils;
 import com.timeSync.www.dto.LoginForm;
 import com.timeSync.www.dto.RegisterForm;
+import com.timeSync.www.dto.UserSeacherForm;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.exception.ConditionException;
 import com.timeSync.www.service.UserService;
@@ -11,10 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -81,5 +80,12 @@ public class UserController {
     saveCacheToken(token, id);
     Set<String> permsSet = userService.searchUserPermissions(id);
     return R.ok("登录成功").put("user", tbUser).put("token", token).put("permission", permsSet);
+  }
+  @GetMapping("/list")
+  @ApiOperation("查询用户")
+  public R selectUser(@Valid UserSeacherForm form){
+    System.out.println(form);
+    PageInfo<TbUser> tbUserPageInfo = userService.userList(form);
+    return R.ok().put("data",tbUserPageInfo);
   }
 }

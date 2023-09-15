@@ -37,6 +37,17 @@
     from tb_user
     where tel=#{phone}
   </select>
+  <select id="selectUser" resultType="com.timeSync.www.entity.TbUser">
+    select * from tb_user
+    <where>
+      <if test="form.name!=null and form.name!=''">
+        nickname=#{form.name}
+      </if>
+      <if test="form.status!=null">
+        and status=#{form.status}
+      </if>
+    </where>
+  </select>
 
   <insert id="insert" parameterType="hashmap">
     insert into tb_user
@@ -73,7 +84,4 @@
     status=#{status},
     create_time=#{createTime}
   </insert>
-
-
-
 </mapper>
