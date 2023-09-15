@@ -257,4 +257,14 @@ public class UserServiceImpl implements UserService {
   public List<TbUser> selectAllUser() {
     return tbUserMapper.selectAllUser();
   }
+
+  @Override
+  public boolean update(TbUser user) {
+    return tbUserMapper.update(user)>0;
+  }
+
+  @Override
+  public boolean delete(int id) {
+    return tbUserMapper.delete(id)>0;
+  }
 }

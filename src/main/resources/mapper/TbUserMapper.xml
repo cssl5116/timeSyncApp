@@ -12,6 +12,21 @@
     update tb_user set open_id=#{openId} ,nickname=#{nickname},photo=#{photo}
     where code=#{code}
   </update>
+  <update id="update">
+    update tb_user set
+    name=#{name},
+    sex=#{sex},
+    tel=#{tel},
+    email=#{email},
+    hiredate=#{hiredate},
+    role=#{role},
+    dept_id=#{deptId},
+    status=#{status}
+    where id=#{id}
+  </update>
+  <delete id="delete">
+    delete from tb_user where id=#{id}
+  </delete>
   <select id="havaCode" resultType="tbUser">
     select *
     from tb_user

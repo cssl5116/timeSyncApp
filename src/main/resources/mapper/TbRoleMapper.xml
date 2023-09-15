@@ -18,15 +18,6 @@
   <select id="findByName" resultType="java.lang.Integer">
     select id from tb_role where role_name=#{name}
   </select>
-    <select id="roleList" resultType="com.timeSync.www.entity.TbRole">
-        SELECT * FROM tb_role
-        <where>
-            <if test="form.roleName != null and form.roleName != ''">
-                role_name=#{form.roleName}
-            </if>
-            and id != 0
-        </where>
-    </select>
 
     <select id="exists" resultType="int">
         SELECT COUNT(1) FROM tb_role r

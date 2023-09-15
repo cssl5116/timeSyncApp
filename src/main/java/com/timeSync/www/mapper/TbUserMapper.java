@@ -58,7 +58,9 @@ public interface TbUserMapper {
 
   int insertUser(TbUser user);
 
+  int update(TbUser user);
 
+  int delete(int id);
 
 }
 

@@ -35,5 +35,6 @@ public interface UserService {
   boolean insertUser(TbUser user);
 
   List<TbUser> selectAllUser();
-
+  boolean update(TbUser user);
+  boolean delete(int id);
 }

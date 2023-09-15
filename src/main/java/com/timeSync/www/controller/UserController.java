@@ -72,7 +72,21 @@ public class UserController {
     }
     return R.error("新增失败");
   }
-
+  @PatchMapping("/update")
+  @ApiOperation("修改用户")
+  public R update(@RequestBody TbUser user) {
+    ArrayList<Object> role = (ArrayList<Object>) user.getRole();
+    ArrayList<Integer> ids = new ArrayList<>();
+    for (Object o : role) {
+      int id = roleMapper.findByName(o.toString());
+      ids.add(id);
+    }
+    user.setRole(JSONUtils.toJSONString(ids));
+    if (userService.update(user)) {
+      return R.ok("修改成功");
+    }
+    return R.error("修改失败");
+  }
 
   @PostMapping("/login")
   @ApiOperation("登录系统")
@@ -141,6 +155,10 @@ public class UserController {
     ArrayList list = userService.searchMembers(param);
     return R.ok().put("result", list);
   }
-
+  @DeleteMapping("/delete/{id}")
+  @ApiOperation("删除成员")
+  public R delete( @PathVariable Integer id){
+    return userService.delete(id)? R.ok("删除成功"):R.error("删除失败");
+  }
 
 }
