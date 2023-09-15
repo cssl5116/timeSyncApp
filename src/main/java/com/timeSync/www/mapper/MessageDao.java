@@ -1,5 +1,6 @@
 package com.timeSync.www.mapper;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
@@ -75,5 +76,39 @@ public class MessageDao {
     sendTime = DateUtil.offset(sendTime, DateField.HOUR, -8);
     map.replace("sendTime", DateUtil.format(sendTime, "yyyy-MM-dd HH:mm"));
     return map;
+  }
+
+  public int totalCount() {
+    JSONObject json = new JSONObject();
+    json.set("$toString", "$_id");
+    Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation.addFields().addField("id").withValue(json).build(),
+        Aggregation.lookup("message_ref", "id", "messageId", "ref"),
+        Aggregation.sort(Sort.by(Sort.Direction.DESC, "sendTime")),
+        Aggregation.count().as("count"),
+        Aggregation.project("count")
+    );
+    AggregationResults<HashMap> aggregate = mongoTemplate.aggregate(aggregation, "message", HashMap.class);
+    List<HashMap> mappedResults = aggregate.getMappedResults();
+    if (CollectionUtil.isNotEmpty(mappedResults)) {
+      return (int) mappedResults.get(0).get("count");
+    } else {
+      return 0;
+    }
+  }
+
+  public List<HashMap> searchList(long start, Integer length) {
+    JSONObject json = new JSONObject();
+    json.set("$toString", "$_id");
+    Aggregation aggregation = Aggregation.newAggregation(
+        Aggregation.addFields().addField("id").withValue(json).build(),
+        Aggregation.lookup("message_ref", "id", "messageId", "ref"),
+        Aggregation.sort(Sort.by(Sort.Direction.DESC, "sendTime")),
+        Aggregation.skip(start),
+        Aggregation.limit(length)
+    );
+    AggregationResults<HashMap> results = mongoTemplate.aggregate(aggregation, "message", HashMap.class);
+    List<HashMap> list = results.getMappedResults();
+    return list;
   }
 }

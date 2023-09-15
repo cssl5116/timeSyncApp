@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author fishx
@@ -82,5 +83,13 @@ public class MessageServiceImpl implements MessageService {
     // 查询未读数据
     long unreadRows = searchUnreadCount(userId);
     return R.ok().put("lastRows", lastRows).put("unreadRows", unreadRows);
+  }
+
+  @Override
+  public Map<String, Object> searchList(long start, Integer size) {
+    HashMap<String, Object> map = new HashMap<>();
+    map.put("list", messageDao.searchList(start, size));
+    map.put("total", messageDao.totalCount());
+    return map;
   }
 }

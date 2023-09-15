@@ -11,9 +11,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/emos?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://localhost:3306/timeSync?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
-      password: lwf666666
+      password: 123456
       initial-size: 2
       max-active: 4
       min-idle: 2
@@ -25,6 +25,7 @@ spring:
     database: 0
     host: localhost
     port: 6379
+    password: admin
     jedis:
       pool:
         max-active: 1000
@@ -56,7 +57,6 @@ time-sync:
 wx:
   app-id: wxd7f6db78f9a96cf7
   app-secret: e76c7e9a20ba5f28a3e5f6d7bca2a1ed
-
 emos:
   jwt:
     secret: abc123456
@@ -73,9 +73,3 @@ emos:
   recieveNotify: http://loaclhost:8080/emos-wx-api/meeting/recieveNotify
 workflow:
   url: http://192.168.92:9090/emos-workflow
-oss:
-  qiniu:
-    url: http://s0c9hhw99.hn-bkt.clouddn.com # 这里如果有自己的域名就去绑定自己的 没有的就只能使用七牛云的测试域名
-    accessKey: JbgaOsYLpkkpG0nCEyRzyQlLOSepwljQ7OYgWm0Y #公钥
-    secretKey: babQTm0kWBCXJ3f7awo2y17TOMYeJsDRdqYKynzK #私钥
-    bucketName: emos-wx-image #控件名称

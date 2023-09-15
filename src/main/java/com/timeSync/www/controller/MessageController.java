@@ -2,6 +2,7 @@ package com.timeSync.www.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.timeSync.www.config.shiro.JwtUtils;
+import com.timeSync.www.dto.RoleSearchForm;
 import com.timeSync.www.dto.SearchMessageByPageForm;
 import com.timeSync.www.exception.ConditionException;
 import com.timeSync.www.service.MessageService;
@@ -64,5 +65,15 @@ public class MessageController {
   public R refreshMessage(@RequestHeader("token") String token) {
     int userId = jwtUtils.getUserId(token);
     return messageService.refreshMessage(userId);
+  }
+
+  @GetMapping("/list")
+  @ApiOperation("列表查询")
+  public R selectList(
+      @RequestParam(defaultValue = "1") Integer offset,
+      @RequestParam(defaultValue = "5") Integer size
+  ) {
+    long start = (long) (offset - 1) * size;
+    return R.ok().put("data", messageService.searchList(start, size));
   }
 }
