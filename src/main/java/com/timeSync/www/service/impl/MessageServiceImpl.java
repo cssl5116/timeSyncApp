@@ -1,18 +1,24 @@
 package com.timeSync.www.service.impl;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
+import com.timeSync.www.dto.MessageAddFrom;
 import com.timeSync.www.entity.MessageEntity;
 import com.timeSync.www.entity.MessageRefEntity;
+import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.mapper.MessageDao;
 import com.timeSync.www.mapper.MessageRefDao;
+import com.timeSync.www.mapper.TbUserMapper;
 import com.timeSync.www.service.MessageService;
+import com.timeSync.www.service.UserService;
 import com.timeSync.www.task.MessageTask;
 import com.timeSync.www.utils.R;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author fishx
@@ -28,6 +34,8 @@ public class MessageServiceImpl implements MessageService {
   MessageDao messageDao;
   @Resource
   MessageTask messageTask;
+  @Resource
+  TbUserMapper userMapper;
 
   @Override
   public String insertMessage(MessageEntity message) {
@@ -91,5 +99,36 @@ public class MessageServiceImpl implements MessageService {
     map.put("list", messageDao.searchList(start, size));
     map.put("total", messageDao.totalCount());
     return map;
+  }
+
+  @Override
+  public R addMessage(MessageAddFrom from) {
+    MessageEntity entity = new MessageEntity();
+    if (from.getSenderId() == 0) {
+      entity.setSenderId(0);
+      entity.setSenderName("系统消息");
+    } else {
+      TbUser tbUser = userMapper.searchById(from.getSenderId());
+      entity.setSenderId(tbUser.getId());
+      entity.setSenderName(tbUser.getNickname());
+    }
+    entity.setMsg(from.getMsg());
+    entity.setUuid(IdUtil.simpleUUID());
+    entity.setSendTime(new Date());
+    String id = this.insertMessage(entity);
+    MessageRefEntity ref = new MessageRefEntity();
+    ref.setMessageId(id);
+    for (String s : from.getRef()) {
+      ref.setReceiverId(userMapper.findByNickName(s));
+    }
+    ref.setLastFlag(true);
+    ref.setReadFlag(false);
+    this.insertMessageRef(ref);
+    return R.ok();
+  }
+
+  @Override
+  public R remove(String id) {
+    return messageDao.remove(id) > 0 ? R.ok("删除成功") : R.error("删除失败");
   }
 }

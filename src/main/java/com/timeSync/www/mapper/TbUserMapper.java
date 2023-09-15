@@ -50,6 +50,10 @@ public interface TbUserMapper {
   public int searchGmId();
 
   List<TbUser> selectUser(@Param("form") UserSeacherForm form);
+
+  List<TbUser> selectAllUser();
+
+  Integer findByNickName(String name);
 }
 
 

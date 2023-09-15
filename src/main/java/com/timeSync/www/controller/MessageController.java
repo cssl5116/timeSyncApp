@@ -2,6 +2,7 @@ package com.timeSync.www.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.timeSync.www.config.shiro.JwtUtils;
+import com.timeSync.www.dto.MessageAddFrom;
 import com.timeSync.www.dto.RoleSearchForm;
 import com.timeSync.www.dto.SearchMessageByPageForm;
 import com.timeSync.www.exception.ConditionException;
@@ -75,5 +76,16 @@ public class MessageController {
   ) {
     long start = (long) (offset - 1) * size;
     return R.ok().put("data", messageService.searchList(start, size));
+  }
+
+  @PostMapping("/save")
+  public R save(@RequestBody MessageAddFrom from) {
+    System.out.println("from = " + from);
+    return messageService.addMessage(from);
+  }
+
+  @DeleteMapping("/delete/{id}")
+  public R remove(@PathVariable String id) {
+    return messageService.remove(id);
   }
 }

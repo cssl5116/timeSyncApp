@@ -32,4 +32,7 @@ public interface UserService {
   ArrayList<HashMap> searchMembers(List param);
 
   PageInfo<TbUser> userList(UserSeacherForm form);
+
+  List<TbUser> selectAllUser();
+
 }

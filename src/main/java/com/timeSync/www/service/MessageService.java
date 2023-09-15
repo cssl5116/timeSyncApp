@@ -1,5 +1,6 @@
 package com.timeSync.www.service;
 
+import com.timeSync.www.dto.MessageAddFrom;
 import com.timeSync.www.entity.MessageEntity;
 import com.timeSync.www.entity.MessageRefEntity;
 import com.timeSync.www.utils.R;
@@ -30,4 +31,8 @@ public interface MessageService {
   R refreshMessage(int userId);
 
   Map<String, Object> searchList(long start, Integer size);
+
+  R addMessage(MessageAddFrom from);
+
+  R remove(String id);
 }

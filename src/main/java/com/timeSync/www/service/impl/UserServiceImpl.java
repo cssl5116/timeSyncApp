@@ -218,4 +218,9 @@ public class UserServiceImpl implements UserService {
     PageHelper.startPage(form.getOffset(),form.getSize());
     return new PageInfo<>(tbUserMapper.selectUser(form));
   }
+
+  @Override
+  public List<TbUser> selectAllUser() {
+    return tbUserMapper.selectAllUser();
+  }
 }
