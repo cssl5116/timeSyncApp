@@ -14,4 +14,7 @@
         </if>
         GROUP BY d.id
     </select>
+    <select id="selectDept" resultType="com.timeSync.www.entity.TbDept">
+        select * from tb_dept
+    </select>
 </mapper>

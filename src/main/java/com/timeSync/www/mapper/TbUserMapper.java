@@ -1,7 +1,9 @@
 package com.timeSync.www.mapper;
 
+import com.timeSync.www.dto.UserSeacherForm;
 import com.timeSync.www.entity.TbUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +48,8 @@ public interface TbUserMapper {
 
 
   public int searchGmId();
+
+  List<TbUser> selectUser(@Param("form") UserSeacherForm form);
 }
 
 

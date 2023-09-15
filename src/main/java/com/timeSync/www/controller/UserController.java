@@ -2,10 +2,7 @@ package com.timeSync.www.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.timeSync.www.config.shiro.JwtUtils;
-import com.timeSync.www.dto.LoginForm;
-import com.timeSync.www.dto.RegisterForm;
-import com.timeSync.www.dto.SearchMembersForm;
-import com.timeSync.www.dto.SearchUserGroupByDeptForm;
+import com.timeSync.www.dto.*;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.exception.ConditionException;
 import com.timeSync.www.service.UserService;
@@ -87,6 +84,11 @@ public class UserController {
     Set<String> permsSet = userService.searchUserPermissions(id);
     return R.ok("登录成功").put("user", tbUser).put("token", token).put("permission", permsSet);
   }
+  @GetMapping("/list")
+  @ApiOperation("查询用户")
+  public R selectUser(UserSeacherForm form){
+    return R.ok().put("data",userService.userList(form));
+  }
 
   @PostMapping("/searchUserGroupByDept")
   @ApiOperation("查询员工列表，按照部门分组排列")
@@ -107,4 +109,6 @@ public class UserController {
     ArrayList list=userService.searchMembers(param);
     return R.ok().put("result",list);
   }
+
+
 }

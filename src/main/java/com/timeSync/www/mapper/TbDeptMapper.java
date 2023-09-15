@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
 * @author fishx
@@ -16,6 +17,8 @@ import java.util.HashMap;
 public interface TbDeptMapper {
     //查询部门成员
     public ArrayList<HashMap> searchDeptMembers(String keyword);
+    public List<TbDept> selectDept();
+
 }
 
 
