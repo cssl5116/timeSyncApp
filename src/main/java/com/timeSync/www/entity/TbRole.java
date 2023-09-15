@@ -1,5 +1,6 @@
 package com.timeSync.www.entity;
 
+import cn.hutool.json.JSONArray;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -33,7 +34,7 @@ public class TbRole implements Serializable {
    */
   @NotNull(message = "[权限集合]不能为空")
   @ApiModelProperty("权限集合")
-  private Object permissions;
+  private String permissions;
 
   @ApiModelProperty("创建时间")
   private Date createAt;
