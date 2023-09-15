@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserService {
   private MessageTask messageTask;
   @Resource
   private StringRedisTemplate stringRedisTemplate;
-
   @Resource
   private TbDeptMapper deptDao;
 
