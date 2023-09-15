@@ -2,11 +2,15 @@ package com.timeSync.www.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.timeSync.www.config.shiro.JwtUtils;
+import com.timeSync.www.dto.UserSeacherForm;
 import com.timeSync.www.entity.MessageEntity;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.exception.ConditionException;
@@ -46,12 +50,10 @@ public class UserServiceImpl implements UserService {
   private JwtUtils jwtUtils;
   @Resource
   private MessageTask messageTask;
-
-  @Resource
-  private TbDeptMapper deptDao;
-
   @Resource
   private StringRedisTemplate stringRedisTemplate;
+  @Resource
+  private TbDeptMapper deptDao;
 
   private String getOpenId(String code) {
     String url = "https://api.weixin.qq.com/sns/jscode2session";
@@ -172,15 +174,17 @@ public class UserServiceImpl implements UserService {
   public R check(String phone) {
     if (tbUserMapper.check(phone)) {
       try {
-        String sms = WebUtils.sms(phone);
+//        String sms = WebUtils.sms(phone);
+        String sms = RandomUtil.randomNumbers(6);
         stringRedisTemplate.opsForValue()
             .set("user:phone:" + phone, sms, 5, TimeUnit.MINUTES);
         return R.ok("发送成功");
       } catch (Exception e) {
+        System.out.println(e.getMessage() + ", " + e.getCause());
         return R.error("验证码发送失败");
       }
     }
-    return R.error("用户不存在");
+    return R.error("该用户不存在");
   }
 
   @Override
@@ -206,5 +210,12 @@ public class UserServiceImpl implements UserService {
   public ArrayList<HashMap> searchMembers(List param) {
     ArrayList<HashMap> list = tbUserMapper.searchMembers(param);
     return list;
+  }
+
+
+  @Override
+  public PageInfo<TbUser> userList(UserSeacherForm form) {
+    PageHelper.startPage(form.getOffset(),form.getSize());
+    return new PageInfo<>(tbUserMapper.selectUser(form));
   }
 }

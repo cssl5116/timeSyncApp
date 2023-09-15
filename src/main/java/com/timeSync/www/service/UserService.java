@@ -1,5 +1,7 @@
 package com.timeSync.www.service;
 
+import com.github.pagehelper.PageInfo;
+import com.timeSync.www.dto.UserSeacherForm;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.utils.R;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,4 +30,6 @@ public interface UserService {
   ArrayList<HashMap> searchUserGroupByDept(String keyword);
 
   ArrayList<HashMap> searchMembers(List param);
+
+  PageInfo<TbUser> userList(UserSeacherForm form);
 }
