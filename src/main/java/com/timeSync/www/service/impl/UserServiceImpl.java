@@ -179,6 +179,7 @@ public class UserServiceImpl implements UserService {
             .set("user:phone:" + phone, sms, 5, TimeUnit.MINUTES);
         return R.ok("发送成功");
       } catch (Exception e) {
+        System.out.println(e.getMessage() + ", " + e.getCause());
         return R.error("验证码发送失败");
       }
     }

@@ -1,10 +1,9 @@
 package com.timeSync.www.mapper;
 
-import com.timeSync.www.dto.UserSeacherForm;
 import com.timeSync.www.entity.TbUser;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +24,7 @@ public interface TbUserMapper {
 
   public Set<String> searchUserPermissions(int userId);
 
-  TbUser searchById(int uxserId);
+  TbUser searchById(int userId);
 
   int updateImg(int userId, String url);
 
@@ -33,7 +32,20 @@ public interface TbUserMapper {
 
   boolean check(String phone);
 
-  List<TbUser> selectUser(@Param("form") UserSeacherForm form);
+  //根据部门查询员工分组
+  public ArrayList<HashMap> searchUserGroupByDept(String keyword);
+
+  //查询会议成员信息
+  public ArrayList<HashMap> searchMembers(List param);
+
+  //搜索用户信息
+  public HashMap searchUserInfo(int userId);
+
+  //搜索部门经理id
+  public int searchDeptManagerId(int id);
+
+
+  public int searchGmId();
 }
 
 

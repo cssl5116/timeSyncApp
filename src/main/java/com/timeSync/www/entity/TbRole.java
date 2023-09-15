@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 角色表
@@ -33,4 +34,10 @@ public class TbRole implements Serializable {
   @NotNull(message = "[权限集合]不能为空")
   @ApiModelProperty("权限集合")
   private Object permissions;
+
+  @ApiModelProperty("创建时间")
+  private Date createAt;
+
+  @ApiModelProperty("更新时间")
+  private Date updateAt;
 }

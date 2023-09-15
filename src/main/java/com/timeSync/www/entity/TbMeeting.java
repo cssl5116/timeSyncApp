@@ -44,7 +44,7 @@ public class TbMeeting implements Serializable {
    */
   @NotNull(message = "[日期]不能为空")
   @ApiModelProperty("日期")
-  private Date date;
+  private String date;
   /**
    * 开会地点
    */
@@ -55,19 +55,19 @@ public class TbMeeting implements Serializable {
    */
   @NotNull(message = "[开始时间]不能为空")
   @ApiModelProperty("开始时间")
-  private Date start;
+  private String start;
   /**
    * 结束时间
    */
   @NotNull(message = "[结束时间]不能为空")
   @ApiModelProperty("结束时间")
-  private Date end;
+  private String end;
   /**
    * 会议类型（1在线会议，2线下会议）
    */
   @NotNull(message = "[会议类型（1在线会议，2线下会议）]不能为空")
   @ApiModelProperty("会议类型（1在线会议，2线下会议）")
-  private Integer type;
+  private Short type;
   /**
    * 参与者
    */
@@ -90,7 +90,7 @@ public class TbMeeting implements Serializable {
    */
   @NotNull(message = "[状态（1未开始，2进行中，3已结束）]不能为空")
   @ApiModelProperty("状态（1未开始，2进行中，3已结束）")
-  private Integer status;
+  private Short status;
   /**
    * 创建时间
    */

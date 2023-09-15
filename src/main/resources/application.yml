@@ -69,5 +69,28 @@ time-sync:
   email:
     system: 3120793223@qq.com
 wx:
-  app-id: wx30d73d97e0d55aca
-  app-secret: 10a44b0864593259533e0e6d05fa3b16
+  app-id: wxd7f6db78f9a96cf7
+  app-secret: e76c7e9a20ba5f28a3e5f6d7bca2a1ed
+
+emos:
+  jwt:
+    secret: abc123456
+    expire: 5 #过期时间（天）
+    cache-expire: 10 #缓存过期时间(天)
+  face:
+    createFaceModelUrl: http://192.168.92.128:3000/create_face_model
+    checkinUrl: http://192.168.92.128:3000/checkin
+  email:
+    system: epic8896@qq.com
+    hr: 2195499047@qq.com
+  image-folder: D:/emos/image
+  code: BF3BDB86B2CE23EE
+  recieveNotify: http://loaclhost:8080/emos-wx-api/meeting/recieveNotify
+workflow:
+  url: http://192.168.92:9090/emos-workflow
+oss:
+  qiniu:
+    url: http://s0c9hhw99.hn-bkt.clouddn.com # 这里如果有自己的域名就去绑定自己的 没有的就只能使用七牛云的测试域名
+    accessKey: JbgaOsYLpkkpG0nCEyRzyQlLOSepwljQ7OYgWm0Y #公钥
+    secretKey: babQTm0kWBCXJ3f7awo2y17TOMYeJsDRdqYKynzK #私钥
+    bucketName: emos-wx-image #控件名称
