@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface MenuService {
   List<TbMenu> findMenuByTypeId(int userId);
+
+  List<TbMenu> menus();
 }

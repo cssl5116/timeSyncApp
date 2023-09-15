@@ -44,4 +44,18 @@ public class MenuServiceImpl implements MenuService {
     }
     return one;
   }
+
+  @Override
+  public List<TbMenu> menus() {
+    List<TbMenu> one = tbMenuMapper.findMenuByTypeId(1, null);
+    for (TbMenu i : one) {
+      List<TbMenu> two = tbMenuMapper.findMenuByTypeId(2, i.getId());
+      for (TbMenu tbMenu : two) {
+        List<TbMenu> three = tbMenuMapper.findMenu(tbMenu.getId());
+        if (three.size() > 0) tbMenu.setChildren(three);
+      }
+      i.setChildren(two);
+    }
+    return one;
+  }
 }

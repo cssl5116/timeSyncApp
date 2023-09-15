@@ -11,6 +11,7 @@ import com.timeSync.www.config.shiro.JwtUtils;
 import com.timeSync.www.entity.MessageEntity;
 import com.timeSync.www.entity.TbUser;
 import com.timeSync.www.exception.ConditionException;
+import com.timeSync.www.mapper.TbDeptMapper;
 import com.timeSync.www.mapper.TbUserMapper;
 import com.timeSync.www.service.UserService;
 import com.timeSync.www.task.MessageTask;
@@ -29,9 +30,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -50,6 +49,9 @@ public class UserServiceImpl implements UserService {
   private MessageTask messageTask;
   @Resource
   private StringRedisTemplate stringRedisTemplate;
+
+  @Resource
+  private TbDeptMapper deptDao;
 
   private String getOpenId(String code) {
     String url = "https://api.weixin.qq.com/sns/jscode2session";
@@ -161,6 +163,7 @@ public class UserServiceImpl implements UserService {
     String cacheCode = stringRedisTemplate.opsForValue().get("user:phone:" + phone);
     TbUser tbUser = tbUserMapper.loginH(phone);
     if (code.equals(cacheCode)) {
+      stringRedisTemplate.delete("user:phone:" + phone);
       return tbUser;
     }
     return null;
@@ -181,5 +184,30 @@ public class UserServiceImpl implements UserService {
       }
     }
     return R.error("该用户不存在");
+  }
+
+  @Override
+  public ArrayList<HashMap> searchUserGroupByDept(String keyword) {
+    ArrayList<HashMap> list_1=deptDao.searchDeptMembers(keyword);
+    ArrayList<HashMap> list_2=tbUserMapper.searchUserGroupByDept(keyword);
+    //进行合并
+    for(HashMap map_1:list_1){
+      long deptId=(Long)map_1.get("id");
+      ArrayList members=new ArrayList();
+      for(HashMap map_2:list_2){
+        long id=(Long) map_2.get("deptId");
+        if(deptId==id){
+          members.add(map_2);
+        }
+      }
+      map_1.put("members",members);
+    }
+    return list_1;
+  }
+
+  @Override
+  public ArrayList<HashMap> searchMembers(List param) {
+    ArrayList<HashMap> list=tbUserMapper.searchMembers(param);
+    return list;
   }
 }

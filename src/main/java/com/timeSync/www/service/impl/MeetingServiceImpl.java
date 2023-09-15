@@ -1,9 +1,12 @@
 package com.timeSync.www.service.impl;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.HashUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONArray;
@@ -52,12 +55,16 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public void insertMeeting(TbMeeting entity) {
+        //实例id
+        entity.setInstanceId(RandomUtil.randomString(32));
         int row = meetingDao.insertMeeting(entity);
         if (row != 1) {
             throw new ConditionException("会议添加失败");
         }
+        //房间号
+        redisTemplate.opsForValue().set(entity.getUuid(), RandomUtil.randomNumbers(4));
         //开启审批工作流
-        startMeetingWorkflow(entity.getUuid(), entity.getCreatorId().intValue(), entity.getDate(), entity.getStart());
+//        startMeetingWorkflow(entity.getUuid(), entity.getCreatorId().intValue(), entity.getDate(), entity.getStart());
     }
 
     //按照日期对会议进行分组
@@ -110,21 +117,6 @@ public class MeetingServiceImpl implements MeetingService {
         if (row != 1) {
             throw new ConditionException("会议更新失败");
         }
-        //会议更新之后删除以前的工作流
-        JSONObject json = new JSONObject();
-        json.set("instanceId", instanceId);
-        json.set("reason", "会议被修改");
-        json.set("uuid", uuid);
-        json.set("code", code);
-        String url = workflow + "/workflow/deleteProcessById";
-        HttpResponse resp = HttpRequest.post(url).header("content-type", "application/json")
-                .body(json.toString()).execute();
-        if (resp.getStatus() != 200) {
-            log.error("删除工作流失败");
-            throw new ConditionException("删除工作流失败");
-        }
-        //创建新的工作流
-        startMeetingWorkflow(uuid, creatorId, date, start);
     }
 
     @Override
@@ -136,25 +128,12 @@ public class MeetingServiceImpl implements MeetingService {
         DateTime date = DateUtil.parse(meeting.get("date") + " " + meeting.get("start"));
         DateTime now = DateUtil.date();
         //会议开始前20分钟不能删除会议
-        if (now.isAfterOrEquals(date.offset(DateField.MINUTE, -20))) {
-            throw new ConditionException("距离会议开始不足20分钟，不能删除会议");
-        }
+//        if (now.isAfterOrEquals(date.offset(DateField.MINUTE, -20))) {
+//            throw new ConditionException("距离会议开始不足20分钟，不能删除会议");
+//        }
         int row = meetingDao.deleteMeetingById(id);
         if (row != 1) {
             throw new ConditionException("会议删除失败");
-        }
-        //删除会议工作流
-        JSONObject json = new JSONObject();
-        json.set("instanceId", instanceId);
-        json.set("reason", "会议被修改");
-        json.set("uuid", uuid);
-        json.set("code", code);
-        String url = workflow + "/workflow/deleteProcessById";
-        HttpResponse resp = HttpRequest.post(url).header("content-type", "application/json")
-                .body(json.toString()).execute();
-        if (resp.getStatus() != 200) {
-            log.error("删除工作流失败");
-            throw new ConditionException("删除工作流失败");
         }
     }
 
