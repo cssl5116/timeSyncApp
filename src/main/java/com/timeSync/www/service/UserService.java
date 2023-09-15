@@ -33,4 +33,7 @@ public interface UserService {
 
   PageInfo<TbUser> userList(UserSeacherForm form);
   boolean insertUser(TbUser user);
+
+  List<TbUser> selectAllUser();
+
 }

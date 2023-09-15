@@ -232,7 +232,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public PageInfo<TbUser> userList(UserSeacherForm form) {
-    PageHelper.startPage(form.getOffset(), form.getSize());
+    PageHelper.startPage(form.getOffset(),form.getSize());
     return new PageInfo<>(tbUserMapper.selectUser(form));
   }
 
@@ -252,4 +252,9 @@ public class UserServiceImpl implements UserService {
   }
 
 
+
+  @Override
+  public List<TbUser> selectAllUser() {
+    return tbUserMapper.selectAllUser();
+  }
 }

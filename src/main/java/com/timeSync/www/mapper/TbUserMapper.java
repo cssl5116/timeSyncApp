@@ -52,6 +52,10 @@ public interface TbUserMapper {
 
   List<TbUser> selectUser(@Param("form") UserSeacherForm form);
 
+  List<TbUser> selectAllUser();
+
+  Integer findByNickName(String name);
+
   int insertUser(TbUser user);
 
 

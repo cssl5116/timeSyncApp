@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.timeSync.www.mapper.TbRoleMapper">
 
   <select id="roleList" resultType="com.timeSync.www.entity.TbRole">
@@ -18,4 +18,39 @@
   <select id="findByName" resultType="java.lang.Integer">
     select id from tb_role where role_name=#{name}
   </select>
+    <select id="roleList" resultType="com.timeSync.www.entity.TbRole">
+        SELECT * FROM tb_role
+        <where>
+            <if test="form.roleName != null and form.roleName != ''">
+                role_name=#{form.roleName}
+            </if>
+            and id != 0
+        </where>
+    </select>
+
+    <select id="exists" resultType="int">
+        SELECT COUNT(1) FROM tb_role r
+        JOIN tb_user u ON JSON_CONTAINS(u.role, CAST(r.id AS CHAR)) WHERE r.id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.timeSync.www.entity.TbRole">
+        UPDATE `emos`.`tb_role` SET
+        <if test="roleName != null">
+            `role_name` = #{roleName},
+        </if>
+        <if test="permissions != null">
+            `permissions` = #{permissions},
+        </if>
+        `updateAt` = NOW()
+        WHERE `id` = #{id};
+    </update>
+
+    <insert id="save" parameterType="com.timeSync.www.entity.TbRole">
+        INSERT INTO `emos`.`tb_role` (`role_name`, `permissions`, `createAt`, `updateAt`)
+        VALUES (#{roleName}, #{permissions}, NOW(), #{updateAt});
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM tb_role WHERE id = #{id}
+    </delete>
 </mapper>

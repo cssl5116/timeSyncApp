@@ -18,6 +18,14 @@ import java.util.List;
 public interface TbRoleMapper {
   List<TbRole> roleList(@Param("form") RoleSearchForm form);
 
+  int exists(@Param("id") int id);
+
+  int update(TbRole tbRole);
+
+  int save(TbRole tbRole);
+
+  int  delete(@Param("id") int id);
+
   List<TbRole> selectRole();
 
   int findByName(String name);
